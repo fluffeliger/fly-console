@@ -1,1 +1,1 @@
-from .console import Console, Color
+from .flyconsole import *
