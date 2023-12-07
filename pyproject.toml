@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flyconsole"
-version = "1.1.1"
+version = "1.2"
 authors = [
   { name="fluffy" },
 ]
@@ -16,6 +16,9 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+
+[project.optional-dependencies]
+PDF = ["msvcrt", "tty"]
 
 [project.urls]
 Homepage = "https://github.com/fluffeliger/fly-console"

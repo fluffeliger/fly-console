@@ -1,14 +1,14 @@
 # Fly Console
 
----
+Fly Console is build to easy manipulate the terminal xonsole in multiple aspects It is possible to change the color, clear the terminal or manipulate the position, visibility of the cursor and use custom input methods.
 
-Fly Console is build to easy manipulate the terminal xonsole in multiple aspects It is possible to change the color, clear the terminal or manipulate the position and visibility of the cursor.
-
-With that all said, lets get into the documentations `:D`
+You can install it for python via pip [here](https://pypi.org/project/flyconsole/) and you can view the source code on github [here](https://github.com/fluffeliger/fly-console).
 
 ## Documenation
 
 Welcome to the documentation about the fly console package c:
+
+The Documentation is based on the newest Version.
 
 With this package it is possible to change the foreground and background color of the text in the terminal, write with or without line breaks, set the cursor position with different modes, show and hide the cursor or clear the console on specific parts.
 
@@ -238,3 +238,51 @@ And you can also clear the whole current line with the following
 from flyconsole import Console
 Console.Clear.current_line()
 ```
+
+---
+
+### Inputs
+
+There are also some inputs you can use. In later updates there are coming more!
+
+#### List Menu (Since V1.2)
+
+A List Menu uses for its fields a `Menuitem`. You can also customize the key events with a `KeyConfiguration`.
+
+To setup a List menu you can write the following
+
+```py
+from flyconsole import ListMenu
+
+menu = Menu(0) # 0 Defines the y coordinate of the menu
+menu.add_item('Item A')
+menu.add_item('Item B')
+menu.add_item('Item C')
+menu.enable() # Shows the menu and enables the Key Events
+
+# After the menu is done you can get its result with
+menu.result
+# The result will return a MenuItem
+```
+
+When we look at the `ListMenu` init arguments
+
+```py
+ListMenu(y:int=0, can_cancel:bool=1, can_escape:bool=1, key_configuration:KeyConfiguration=KeyConfiguration())
+```
+
+we can see, we can disable the `[CTRl] + [C]` cancel and the `[ESC]` key. The cancel and escape keys can also be modified in a `KeyConfiguration`
+
+The Keyconfiguration looks like this
+
+```py
+@dataclass
+class KeyConfiguration:
+    up: tuple = (72, 1)
+    down: tuple = (80, 1)
+    select: tuple = (13, 0)
+    escape: tuple = (27, 0)
+    cancel: tuple = (3, 0)
+```
+
+Foreach tuple the first argument is the keycode and the second argument defines if the key means something else. For example if you press an arrow key it will return `(72, 1)` and if u press `[H]` it will return `(72, 0)`.

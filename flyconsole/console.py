@@ -1,5 +1,9 @@
 import sys
 import os
+if os.name == 'nt': # Windows
+    import msvcrt
+else: # Unix
+    import tty
 
 class Color:
     # NOTE: Colors range from 0 - 255
@@ -43,6 +47,41 @@ class Console:
     @staticmethod
     def reset_color() -> None:
         _Console.escape(f'0m')
+    
+    @staticmethod
+    def get_width() -> int:
+        return os.get_terminal_size().columns
+    
+    @staticmethod
+    def get_height() -> int:
+        return os.get_terminal_size().lines
+    
+    @staticmethod
+    def get_dimensions() -> tuple[int, int]:
+        return Console.get_height(), Console.get_width()
+    
+    @staticmethod
+    def getch() -> int:
+        if os.name == 'nt':
+            char = msvcrt.getch()
+            if char == b'\xe0':
+                arrow_key = msvcrt.getch()
+                return ord(arrow_key), 1
+            else:
+                return ord(char), 0
+        else:
+            fd = sys.stdin.fileno()
+            old_settings = tty.tcgetattr(fd)
+            try:
+                tty.setcbreak(fd)
+                char = sys.stdin.read(1)
+                if char == '\x1b':
+                    special_key = sys.stdin.read(2)
+                    return ord(special_key[-1]), 1
+                else:
+                    return ord(char), 0
+            finally:
+                tty.tcsetattr(fd, tty.TCSADRAIN, old_settings)
     
     class Cursor:
         @staticmethod
